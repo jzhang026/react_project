@@ -1,2 +1,4 @@
 node_modules
 .webpack-cache
+public
+!public/*.html

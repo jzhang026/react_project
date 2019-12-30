@@ -15,7 +15,8 @@
   ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "start": "webpack-dev-server --content-base public/"
+    "start": "webpack-dev-server --content-base public/",
+    "build": "webpack --config webpack.config.js"
   },
   "dependencies": {
     "history": "^4.10.1",
