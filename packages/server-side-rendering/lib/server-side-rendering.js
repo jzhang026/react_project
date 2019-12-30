@@ -3,5 +3,5 @@
 module.exports = serverSideRendering;
 
 function serverSideRendering() {
-    // TODO
+  // TODO
 }

@@ -1,14 +1,12 @@
-const path = require('path')
+const path = require('path');
 module.exports = {
   entry: {
-    app: [
-      './client/index.js'
-    ]
+    app: ['./client/index.js'],
   },
   output: {
     path: path.join(__dirname, 'public'),
     publicPath: '/',
-    filename: 'js/[name].js'
+    filename: 'js/[name].js',
   },
   module: {
     rules: [
@@ -19,14 +17,12 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: '.webpack-cache'
-            }
-
-          }
-        ]
-      }
-    ]
+              cacheDirectory: '.webpack-cache',
+            },
+          },
+        ],
+      },
+    ],
   },
   devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map',
-
-}
+};
