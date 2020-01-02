@@ -14,14 +14,13 @@
     "lib"
   ],
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
     "precommit": "lint-staged",
-    "start": "rimraf build/* && yarn build:app:dev && concurrently --kill-others \"yarn watch:webpack:dev\" \"yarn start:app:dev\"",
-    "start:hot": "rimraf build/* && yarn build:app:dev && concurrently --kill-others \"yarn start:serve:dev\" \"yarn start:app:dev\"",
+    "start": "rimraf build/* && yarn build:app:dev && concurrently --kill-others \"yarn webpack:watch:dev\" \"yarn watch:app:dev\"",
+    "start:hot": "rimraf build/* && yarn build:app:dev && concurrently --kill-others \"yarn webpack:serve:dev\" \"yarn watch:app:dev\"",
     "build:app:dev": "cross-env NODE_ENV=development webpack --env development --config config/webpack.config.js",
-    "start:app:dev": "cross-env NODE_ENV=development nodemon build/server/server.js -i build/client",
-    "start:serve:dev": "cross-env NODE_ENV=development webpack-serve --config config/webpack.config.js --no-clipboard",
-    "watch:webpack:dev": "cross-env NODE_ENV=development webpack --env development -w --config config/webpack.config.js"
+    "watch:app:dev": "cross-env NODE_ENV=development nodemon build/server/server.js -i build/client",
+    "webpack:serve:dev": "cross-env NODE_ENV=development webpack-serve --config config/webpack.config.dev.js --no-clipboard",
+    "webpack:watch:dev": "cross-env NODE_ENV=development webpack --env development -w --config config/webpack.config.js"
   },
   "lint-staged": {
     "*.{js.css}": [
