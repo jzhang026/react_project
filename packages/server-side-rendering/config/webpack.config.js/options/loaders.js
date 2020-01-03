@@ -20,7 +20,12 @@ const cssLoaderClient = {
         },
       },
     },
-    'postcss-loader?sourceMap',
+    {
+      loader: 'postcss-loader',
+      options: {
+        sourceMap: true,
+      },
+    },
   ],
 };
 
