@@ -19,24 +19,24 @@ app.use(paths.publicPath, express.static(paths.clientBuild));
 app.use(manifestHelpers({ manifestPath: `${paths.clientBuild}/manifest.json` }));
 
 app.use((req, res, next) => {
-  req.store = configureStore();
-  return next();
+	req.store = configureStore();
+	return next();
 });
 
 app.get('*', (req, res) => {
-  const markup = renderToString(
-    <Provider store={req.store}>
-      <Router location={req.url} context={{}}>
-        <IntlProvider>
-          <App />
-        </IntlProvider>
-      </Router>
-    </Provider>
-  );
+	const markup = renderToString(
+		<Provider store={req.store}>
+			<Router location={req.url} context={{}}>
+				<IntlProvider>
+					<App />
+				</IntlProvider>
+			</Router>
+		</Provider>
+	);
 
-  const state = JSON.stringify(req.store.getState());
+	const state = JSON.stringify(req.store.getState());
 
-  return res.send(`
+	return res.send(`
       <!DOCTYPE html>
       <html>
         <head>
@@ -56,5 +56,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(process.env.PORT || 8500, () => {
-  console.log(`Server is listening on http://localhost:${process.env.PORT || 8500}`);
+	console.log(`Server is listening on http://localhost:${process.env.PORT || 8500}`);
 });

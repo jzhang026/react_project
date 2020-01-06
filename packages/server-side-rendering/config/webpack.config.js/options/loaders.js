@@ -1,83 +1,83 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const babelLoader = {
-  test: /\.(js|jsx)$/,
-  // exclude: /node_modules/,
-  loader: 'babel-loader',
+	test: /\.(js|jsx)$/,
+	// exclude: /node_modules/,
+	loader: 'babel-loader',
 };
 
 const cssLoaderClient = {
-  test: /\.css$/,
-  use: [
-    MiniCssExtractPlugin.loader,
-    {
-      loader: 'css-loader',
-      options: {
-        localsConvention: 'camelCase',
-        importLoaders: 1,
-        modules: {
-          localIdentName: '[name]__[local]--[hash:base64:5]',
-        },
-      },
-    },
-    {
-      loader: 'postcss-loader',
-      options: {
-        sourceMap: true,
-      },
-    },
-  ],
+	test: /\.css$/,
+	use: [
+		MiniCssExtractPlugin.loader,
+		{
+			loader: 'css-loader',
+			options: {
+				localsConvention: 'camelCase',
+				importLoaders: 1,
+				modules: {
+					localIdentName: '[name]__[local]--[hash:base64:5]',
+				},
+			},
+		},
+		{
+			loader: 'postcss-loader',
+			options: {
+				sourceMap: true,
+			},
+		},
+	],
 };
 
 const cssLoaderServer = {
-  test: /\.css$/,
-  exclude: /node_modules/,
-  use: [
-    {
-      loader: 'css-loader',
-      options: {
-        localsConvention: 'camelCase',
-        importLoaders: 1,
-        modules: {
-          localIdentName: '[name]__[local]--[hash:base64:5]',
-        },
-        onlyLocals: true,
-      },
-    },
-    'postcss-loader?sourceMap',
-  ],
+	test: /\.css$/,
+	exclude: /node_modules/,
+	use: [
+		{
+			loader: 'css-loader',
+			options: {
+				localsConvention: 'camelCase',
+				importLoaders: 1,
+				modules: {
+					localIdentName: '[name]__[local]--[hash:base64:5]',
+				},
+				onlyLocals: true,
+			},
+		},
+		'postcss-loader?sourceMap',
+	],
 };
 
 const urlLoader = {
-  test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/,
-  loader: 'url-loader',
-  options: {
-    limit: 10000,
-    name: 'static/media/[name].[hash:8].[ext]',
-  },
+	test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/,
+	loader: 'url-loader',
+	options: {
+		limit: 10000,
+		name: 'static/media/[name].[hash:8].[ext]',
+	},
 };
 
 const fileLoader = {
-  exclude: [/\.(js|css|mjs|html|json)$/],
-  use: [
-    {
-      loader: 'file-loader',
-      options: {
-        name: 'static/media/[name].[hash:8].[ext]',
-      },
-    },
-  ],
+	exclude: [/\.(js|css|mjs|html|json)$/],
+	use: [
+		{
+			loader: 'file-loader',
+			options: {
+				name: 'static/media/[name].[hash:8].[ext]',
+			},
+		},
+	],
 };
 
 const client = [
-  {
-    oneOf: [babelLoader, cssLoaderClient, urlLoader, fileLoader],
-  },
+	{
+		oneOf: [babelLoader, cssLoaderClient, urlLoader, fileLoader],
+	},
 ];
 
 const server = [babelLoader, cssLoaderServer, urlLoader, fileLoader];
 
 module.exports = {
-  client,
-  server,
+	client,
+	server,
 };
