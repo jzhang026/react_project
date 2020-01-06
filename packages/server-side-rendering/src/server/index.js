@@ -1,60 +1,69 @@
-import React from 'react';
+// import React from 'react';
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import chalk from 'chalk';
 import manifestHelpers from 'express-manifest-helpers';
-import { renderToString } from 'react-dom/server';
-import { StaticRouter as Router } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import IntlProvider from '../shared/IntlProvider';
+import bodyParser from 'body-parser';
 import { configureStore } from '../shared/store';
-import App from '../shared/App';
+import serverRender from './render';
 import paths from '../../config/paths';
 
 require('dotenv').config();
 
 const app = express();
 
+// Use Nginx or Apache to serve static assets in production or remove the if() around the following
+// lines to use the express.static middleware to serve assets for production (not recommended!)
+if (process.env.NODE_ENV === 'development') {
+    app.use(paths.publicPath, express.static(paths.clientBuild));
+    app.use('/favicon.ico', (req, res) => {
+        res.send('');
+    });
+}
+
 app.use(cors());
-app.use(paths.publicPath, express.static(paths.clientBuild));
-app.use(manifestHelpers({ manifestPath: `${paths.clientBuild}/manifest.json` }));
+
+app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  req.store = configureStore();
-  return next();
+    req.store = configureStore();
+    return next();
 });
 
-app.get('*', (req, res) => {
-  const markup = renderToString(
-    <Provider store={req.store}>
-      <Router location={req.url} context={{}}>
-        <IntlProvider>
-          <App />
-        </IntlProvider>
-      </Router>
-    </Provider>
-  );
+app.use(manifestHelpers({ manifestPath: `${paths.clientBuild}/manifest.json` }));
 
-  const state = JSON.stringify(req.store.getState());
+app.use(serverRender());
 
-  return res.send(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title></title>
-          <script src="${res.locals.assetPath('bundle.js')}" defer></script>
-          <script src="${res.locals.assetPath('vendor.js')}" defer></script>
-          <link rel="stylesheet" type="text/css" href="${res.locals.assetPath('bundle.css')}" />
-        </head>
-        <body>
-          <div id="app">${markup}</div>
-          <script>
-              window.__PRELOADED_STATE__ = ${state};
-          </script>
-        </body>
-      </html>
-    `);
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+    return res.status(404).json({
+        status: 'error',
+        message: err.message,
+        stack:
+            // print a nicer stack trace by splitting line breaks and making them array items
+            process.env.NODE_ENV === 'development' &&
+            (err.stack || '')
+                .split('\n')
+                .map((line) => line.trim())
+                .map((line) => line.split(path.sep).join('/'))
+                .map((line) =>
+                    line.replace(
+                        process
+                            .cwd()
+                            .split(path.sep)
+                            .join('/'),
+                        '.'
+                    )
+                ),
+    });
 });
 
 app.listen(process.env.PORT || 8500, () => {
-  console.log(`Server is listening on http://localhost:${process.env.PORT || 8500}`);
+    console.log(
+        `[${new Date().toISOString()}]`,
+        chalk.blue(`App is running: 🌎 http://localhost:${process.env.PORT || 8500}`)
+    );
 });
+
+export default app;

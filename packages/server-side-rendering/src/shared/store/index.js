@@ -2,21 +2,29 @@ import thunk from 'redux-thunk';
 import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './rootReducer';
 
-// const middlewares = [thunk];
-
 export const configureStore = ({ initialState, middleware = [] } = {}) => {
-  const devtools =
-    typeof window !== 'undefined' &&
-    typeof window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function' &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ actionsBlacklist: [] });
+    const devtools =
+        typeof window !== 'undefined' &&
+        typeof window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function' &&
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ actionsBlacklist: [] });
 
-  const composeEnhancers = devtools || compose;
+    const composeEnhancers = devtools || compose;
 
-  return createStore(
-    rootReducer,
-    initialState,
-    composeEnhancers(applyMiddleware(...[thunk].concat(...middleware)))
-  );
+    const store = createStore(
+        rootReducer,
+        initialState,
+        composeEnhancers(applyMiddleware(...[thunk].concat(...middleware)))
+    );
+
+    if (process.env.NODE_ENV !== 'production') {
+        if (module.hot) {
+            module.hot.accept('./rootReducer', () =>
+                store.replaceReducer(require('./rootReducer').default)
+            );
+        }
+    }
+
+    return store;
 };
 
 export default configureStore;
