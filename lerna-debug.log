@@ -1,0 +1,13 @@
+0 silly argv { _: [ 'add' ],
+0 silly argv   scope: 'server-side-rendering',
+0 silly argv   dev: true,
+0 silly argv   D: true,
+0 silly argv   globs: [],
+0 silly argv   lernaVersion: '3.18.4',
+0 silly argv   '$0': 'lerna',
+0 silly argv   pkg: 'stas-webpack-plugin' }
+1 notice cli v3.18.4
+2 verbose rootPath /Users/adrian.zhang/Desktop/dev-project/react_project
+3 info versioning independent
+4 error Error: 404 Not Found - GET https://registry.npmjs.org/stas-webpack-plugin - Not found
+4 error     at res.buffer.catch.then.body (/Users/adrian.zhang/.nvm/versions/node/v11.15.0/lib/node_modules/lerna/node_modules/@evocateur/npm-registry-fetch/check-response.js:104:15)
