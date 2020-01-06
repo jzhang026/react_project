@@ -1,6 +1,6 @@
 const baseConfig = require('./client.base');
 
 module.exports = {
-	...baseConfig,
-	mode: 'production',
+  ...baseConfig,
+  mode: 'production',
 };

@@ -9,17 +9,17 @@ import { configureStore } from '../shared/store';
 
 const history = createHistory();
 const store = configureStore({
-	initialState: window.__PRELOADED_STATE__,
-	middleware: [routerMiddleware(history)],
+  initialState: window.__PRELOADED_STATE__,
+  middleware: [routerMiddleware(history)],
 });
 
 hydrate(
-	<Provider store={store}>
-		<Router history={history}>
-			<IntlProvider>
-				<App />
-			</IntlProvider>
-		</Router>
-	</Provider>,
-	document.getElementById('app')
+  <Provider store={store}>
+    <Router history={history}>
+      <IntlProvider>
+        <App />
+      </IntlProvider>
+    </Router>
+  </Provider>,
+  document.getElementById('app')
 );
